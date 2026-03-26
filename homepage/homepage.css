@@ -1,0 +1,72 @@
+/* استيراد خط جميل */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Cairo', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #ffffff;
+    text-align: center;
+}
+
+header {
+    padding: 60px 20px;
+}
+
+header h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+.content {
+    background: #ffffff;
+    color: #333;
+    margin: 40px auto;
+    padding: 40px;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.content h2 {
+    margin-bottom: 20px;
+}
+
+.content p {
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+button {
+    background: #2a5298;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #1e3c72;
+    transform: scale(1.05);
+}
+
+footer {
+    margin-top: 40px;
+    padding: 20px;
+    font-size: 14px;
+    opacity: 0.7;
+}

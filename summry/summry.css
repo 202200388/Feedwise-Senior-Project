@@ -1,0 +1,101 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:#F7F8F0;
+padding:30px;
+}
+
+/* Navbar */
+
+.navbar{
+background:#355872;
+color:white;
+padding:15px;
+border-radius:6px;
+margin-bottom:20px;
+}
+
+/* Cards */
+
+.card{
+background:white;
+padding:20px;
+border-radius:6px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+.card h3{
+color:#355872;
+margin-bottom:15px;
+}
+
+/* Comments lines */
+
+.comments span{
+color:#355872;
+display:block;
+margin-bottom:10px;
+}
+
+.line{
+height:8px;
+background:#9CD5FF;
+margin-bottom:10px;
+border-radius:4px;
+}
+
+/* Grid */
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+/* Lists */
+
+ul{
+padding-left:20px;
+}
+
+li{
+margin-bottom:8px;
+color:#355872;
+}
+
+/* Issues */
+
+.issue{
+margin-bottom:15px;
+}
+
+.progress-group{
+margin-top:10px;
+}
+
+.progress{
+height:12px;
+background:#ddd;
+border-radius:6px;
+margin-bottom:10px;
+}
+
+.positive{
+height:100%;
+width:60%;
+background:#7AAACE;
+border-radius:6px;
+}
+
+.negative{
+height:100%;
+width:35%;
+background:#e07a7a;
+border-radius:6px;
+}
