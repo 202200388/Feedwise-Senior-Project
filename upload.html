@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FeedWise | Upload Feedback</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="stylesheet" href="upload.css" />
+</head>
+<body>
+
+  <div class="upload-page">
+
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="feedwise-logo.png" alt="FeedWise Logo" class="sidebar-logo" />
+        <div class="sidebar-brand-text">
+          <h2>Feed<span>Wise</span></h2>
+          <p>Smart Feedback Analysis</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="profile.html">Profile</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="upload.html" class="active">Upload Feedback</a>
+        <a href="summary.html">Summary</a>
+        <a href="compare.html">Compare</a>
+        <a href="settings.html">Settings</a>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar">R</div>
+        <div>
+          <h4>Reem Zayed</h4>
+          <p>Frontend Developer</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+
+      <header class="topbar">
+        <div>
+          <p class="breadcrumb">Home / Upload Feedback</p>
+          <h1>Upload Feedback</h1>
+          <p class="topbar-subtitle">
+            Upload a file or enter feedback text to analyze and summarize it.
+          </p>
+        </div>
+      </header>
+
+      <section class="upload-card">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="file-tab">Upload File</button>
+          <button class="tab-btn" data-tab="text-tab">Input Text</button>
+        </div>
+
+        <div id="file-tab" class="tab-content active">
+          <div class="drop-zone" id="dropZone">
+            <input type="file" id="fileInput" hidden />
+
+            <div class="drop-zone-content">
+              <div class="upload-icon">📁</div>
+              <h3>Drag & Drop your file here</h3>
+              <p>or click to browse from your device</p>
+
+              <button type="button" class="browse-btn" id="browseBtn">Browse File</button>
+
+              <span class="file-types">Supported: PDF, DOCX, TXT, CSV</span>
+              <p class="file-name" id="fileName">No file selected</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="text-tab" class="tab-content">
+          <label for="feedbackText">Enter Feedback Text</label>
+          <textarea id="feedbackText" placeholder="Paste student feedback here..."></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="submit-btn">Submit Feedback</button>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <script src="upload.js"></script>
+</body>
+</html>
