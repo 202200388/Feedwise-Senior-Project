@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FeedWise | Student Feedback</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    
+    <style>
+        body {
+            background: #f8fafc;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .custom-card {
+            background: #fff;
+            width: 100%;
+            max-width: 950px;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        .form-area {
+            padding: 50px;
+        }
+
+        .image-area {
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .brand-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            width: 80%;
+        }
+
+        .input-item {
+            margin-bottom: 20px;
+        }
+
+        .input-item label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        .styled-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: 0.3s;
+            background-color: white;
+            margin-bottom: 15px;
+        }
+
+        .styled-input:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .submit-blue-btn {
+            width: 100%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-blue-btn:hover {
+            background: #2563eb;
+        }
+
+        @media (max-width: 768px) {
+            .custom-card { grid-template-columns: 1fr; }
+            .image-area { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="brand" onclick="window.location.href='/'" style="cursor: pointer;">
+            <img src="{{ url_for('static', filename='feedwise-logo.png') }}" class="brand-logo" />
+            <div class="brand-text">
+                <h2>Feed<span>Wise</span></h2>
+                <p>Smart Feedback Analysis</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="custom-card">
+            
+            <div class="form-area">
+                <h1 style="color: #1e293b; margin: 0 0 5px 0; font-size: 28px;">Course Feedback</h1>
+                <p style="color: #64748b; margin-bottom: 30px; font-size: 15px;">Your feedback helps us grow.</p>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div style="padding: 15px; margin-bottom: 20px; border-radius: 8px; 
+                                color: {{ '#721c24' if category == 'danger' else '#155724' }}; 
+                                background-color: {{ '#f8d7da' if category == 'danger' else '#d4edda' }};">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <form action="{{ url_for('student_feedback') }}" method="POST">
+                    <div class="input-item">
+                        <label>Choose your course</label>
+                        <select name="course_id" id="course_select" class="styled-input" required>
+                            <option value="" disabled selected>Select a course</option>
+                            {% for course in courses %}
+                                <option value="{{ course.id }}">{{ course.code }} - {{ course.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input-item">
+                        <label>Choose your section</label>
+                        <select name="section_id" id="section_select" class="styled-input" required>
+                            <option value="" disabled selected>Please select a course first</option>
+                        </select>
+                    </div>
+                    <div class="input-item">
+                        <label>Your Feedback</label>
+                        <textarea name="comment" rows="4" class="styled-input" placeholder="What do you think about the teaching methods?" style="resize: none;" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-blue-btn">Submit Feedback</button>
+                </form>
+
+                <p style="margin-top: 25px; font-size: 14px; color: #64748b; text-align: center;">
+                    Finished? <a href="{{ url_for('login') }}" style="color: #3b82f6; font-weight: 600; text-decoration: none;">Go back to login</a>
+                </p>
+            </div>
+            <div class="image-area">
+                <div class="brand-box">
+                    <img src="{{ url_for('static', filename='feedwise-logo.png') }}" style="width: 60px; margin-bottom: 15px;">
+                    <p style="margin: 0; font-weight: 700; color: #1e293b; font-size: 18px;">FeedWise</p>
+                    <p style="font-size: 13px; color: #94a3b8; margin-top: 8px; line-height: 1.5;">by using student voices and AI-driven insights to improve education.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        document.getElementById('course_select').addEventListener('change', function() {
+            var courseId = this.value;
+            var sectionSelect = document.getElementById('section_select');
+            
+            // إعادة ضبط قائمة السكاشن عند تغيير المادة
+            sectionSelect.innerHTML = '<option value="" disabled selected>Loading sections...</option>';
+
+            if (courseId) {
+                // طلب البيانات من السيرفر
+                fetch('/get_sections/' + courseId)
+                .then(response => response.json())
+                .then(data => {
+                    sectionSelect.innerHTML = '<option value="" disabled selected>Choose your section</option>';
+                    if (data.sections.length > 0) {
+                        data.sections.forEach(function(section) {
+                            var option = document.createElement('option');
+                            option.value = section.id;
+                            option.text = 'Section ' + section.section_number + ' - Dr. ' + section.instructor_name;
+                            sectionSelect.appendChild(option);
+                        });
+                    } else {
+                        sectionSelect.innerHTML = '<option value="" disabled selected>No sections found</option>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching sections:', error);
+                    sectionSelect.innerHTML = '<option value="" disabled selected>Error loading sections</option>';
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

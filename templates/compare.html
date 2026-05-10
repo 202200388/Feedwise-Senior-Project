@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FeedWise | Compare</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='compare.css') }}">
+  <script>
+    if ("{{ saved_theme }}" === "dark") {
+      document.documentElement.classList.add('dark-mode');
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.classList.add('dark-mode');
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <div class="compare-page">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="{{ url_for('static', filename='feedwise-logo.png') }}" alt="FeedWise Logo" class="sidebar-logo" />
+        <div class="sidebar-brand-text">
+          <h2>Feed<span>Wise</span></h2>
+          <p>Smart Feedback Analysis</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        {% if session['user_role']|lower == 'instructor' or session['user_role']|lower == 'admin' %}
+        <a class="nav-item home-active">Home</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('instructor_download') }}">Download Feedbacks</a>
+        <a href="{{ url_for('upload') }}">Upload Feedback</a>
+        <a href="{{ url_for('summary') }}">Summary</a>
+        <a href="{{ url_for('compare') }}" class="active">Compare</a>
+        <a href="{{ url_for('settings') }}">Settings</a>
+        <a href="{{ url_for('logout') }}" style="color: #d93025;">Logout</a>
+        {% endif %}
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar">
+          {{ session['user_name'][0]|upper if session['user_name'] else 'U' }}
+        </div>
+        <div>
+          <h4>{{ session['user_name'] }}</h4>
+          <p>{{ session['user_role'] }}</p>
+        </div>
+      </div>
+    </aside>
+<main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="breadcrumb">Home / Compare</p>
+          <h1>Compare Courses</h1>
+          <p class="topbar-subtitle">
+            Compare feedback results across courses and instructors.
+          </p>
+        </div>
+      </header>
+
+      <section class="compare-controls card">
+        <div class="control-group">
+          <label for="course1">Course 1</label>
+          <select id="course1">
+            <option value="" disabled selected>Select Course</option>
+            {% for course in courses %}
+            <option value="{{ course.code }}">{{ course.code }} - {{ course.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="course2">Course 2</label>
+          <select id="course2">
+            <option value="" disabled selected>Select Course</option>
+            {% for course in courses %}
+            <option value="{{ course.code }}">{{ course.code }} - {{ course.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="compare-btn-box">
+          <button id="compareBtn">Compare</button>
+        </div>
+      </section>
+
+      <section class="compare-grid">
+        <!-- Course Panel 1 -->
+        <div class="course-panel card" id="panel1">
+          <div class="course-header blue-header">
+            <h2 id="name1">Select Course</h2>
+            <p id="prof1">Instructor Name</p>
+          </div>
+
+          <div class="panel-box">
+            <h3>Feedback Summary</h3>
+            <table class="table-summary">
+              <tr>
+                <th>Date</th>
+                <td id="date1">---</td>
+              </tr>
+              <tr>
+                <th>Feedback Content</th>
+                <td id="sum1">Please select a course to see the AI analysis summary.</td>
+              </tr>
+              <tr>
+                <th>Section</th>
+                <td id="sec1">---</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="feedback-split">
+            <div class="mini-box positive-box">
+              <h3>Positive</h3>
+              <ul id="pos-list1" class="analysis-list"></ul>
+            </div>
+            <div class="mini-box negative-box">
+              <h3>Negative</h3>
+              <ul id="neg-list1" class="analysis-list"></ul>
+            </div>
+          </div>
+
+          <div class="stats-box">
+            <h3>Feedback Stats</h3>
+            <div class="stat-row">
+              <span>Positive</span>
+              <span id="pos-val1">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress positive-progress" id="pos-bar1" style="width: 0%"></div>
+            </div>
+            <div class="stat-row">
+              <span>Negative</span>
+              <span id="neg-val1">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress negative-progress" id="neg-bar1" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Panel 2 -->
+        <div class="course-panel card" id="panel2">
+          <div class="course-header orange-header">
+            <h2 id="name2">Select Course</h2>
+            <p id="prof2">Instructor Name</p>
+          </div>
+
+          <div class="panel-box">
+            <h3>Feedback Summary</h3>
+            <table class="table-summary">
+                <tr>
+                    <th>Date</th>
+                    <td id="date2">---</td>
+                </tr>
+                <tr>
+                    <th>Feedback Content</th>
+                    <td id="sum2">Please select a course to see the AI analysis summary.</td>
+                </tr>
+                <tr>
+                    <th>Section</th>
+                    <td id="sec2">---</td>
+                </tr>
+            </table>
+          </div>
+
+          <div class="feedback-split">
+            <div class="mini-box positive-box">
+                <h3>Positive</h3>
+                <ul id="pos-list2" class="analysis-list"></ul>
+            </div>
+            <div class="mini-box negative-box">
+                <h3>Negative</h3>
+                <ul id="neg-list2" class="analysis-list"></ul>
+            </div>
+          </div>
+
+          <div class="stats-box">
+            <h3>Feedback Stats</h3>
+            <div class="stat-row">
+              <span>Positive</span>
+              <span id="pos-val2">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress second-positive" id="pos-bar2" style="width: 0%"></div>
+            </div>
+            <div class="stat-row">
+              <span>Negative</span>
+              <span id="neg-val2">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress second-negative" id="neg-bar2" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <style>
+      .table-summary { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
+      .table-summary th { width: 130px; text-align: left; padding: 8px 5px; color: #666; font-size: 0.9rem; vertical-align: top; }
+      .table-summary td { text-align: left; padding: 8px 5px; color: #333; word-wrap: break-word; vertical-align: top; line-height: 1.4; }
+      .analysis-list { padding-left: 20px; margin: 0; min-height: 30px; }
+      .analysis-list li { margin-bottom: 6px; font-size: 0.85rem; color: #444; }
+    </style>
+
+<script>
+    //press compare 
+    document.getElementById('compareBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const firstCourse = document.getElementById('course1').value;
+        const secondCourse = document.getElementById('course2').value;
+
+        if (!firstCourse || !secondCourse) {
+            alert("Please select two courses to compare.");
+            return;
+        }
+
+        //remove old data
+        [1, 2].forEach(num => {
+            document.getElementById(`sum${num}`).innerText = "Loading AI Analysis...";
+            document.getElementById(`pos-list${num}`).innerHTML = '';
+            document.getElementById(`neg-list${num}`).innerHTML = '';
+        });
+
+        fetchCourseData(1, firstCourse);
+        fetchCourseData(2, secondCourse);
+    });
+
+    function fetchCourseData(num, courseCode) {
+        fetch(`/api/get_analysis/${courseCode}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById(`sum${num}`).innerText = "No data available for this course.";
+                    return;
+                }
+                updateCompareUI(num, data);
+            })
+            .catch(err => {
+                console.error("Fetch Error:", err);
+                document.getElementById(`sum${num}`).innerText = "Error connecting to server.";
+            });
+    }
+
+    function updateCompareUI(num, data) {
+        document.getElementById(`sum${num}`).innerText = data.summary || data.summary_text || "No summary available.";
+        document.getElementById(`name${num}`).innerText = data.code || "";
+        document.getElementById(`prof${num}`).innerText = data.professor || "N/A";
+        document.getElementById(`date${num}`).innerText = data.date || "N/A";
+        document.getElementById(`sec${num}`).innerText = data.section_id || "N/A";
+
+        //update sentiment
+        const score = Math.round(data.pos_score) || 0;
+        const negScore = 100 - score;
+
+        //update values
+        document.getElementById(`pos-val${num}`).innerText = score + "%";
+        document.getElementById(`neg-val${num}`).innerText = negScore + "%";
+
+        //update progress bars
+        document.getElementById(`pos-bar${num}`).style.width = score + "%";
+        document.getElementById(`neg-bar${num}`).style.width = negScore + "%";
+
+        //update list for (+ve/-ve points)
+        renderPoints(`pos-list${num}`, data.positive_points);
+        renderPoints(`neg-list${num}`, data.negative_points);
+    }
+
+    function renderPoints(elementId, points) {
+        const container = document.getElementById(elementId);
+        container.innerHTML = ''; 
+
+        if (Array.isArray(points) && points.length > 0) {
+            points.forEach(text => {
+                const li = document.createElement('li');
+                li.innerText = text;
+                container.appendChild(li);
+            });
+        } else {
+            const li = document.createElement('li');
+            li.innerText = "No specific highlights.";
+            li.style.color = "#999";
+            container.appendChild(li);
+        }
+    }
+</script>
+</body>
+</html>

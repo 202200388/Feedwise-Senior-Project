@@ -5,20 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FeedWise | Welcome</title>
 
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
-  <link rel="apple-touch-icon" href="favicon.png">
-
-  <link rel="stylesheet" href="welcome.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicon.png') }}">
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='welcome.css') }}">
 </head>
 <body>
 
-  <div class="welcome-page">
-
+    <div class="welcome-page">
     <header class="navbar">
       <div class="brand">
-        <img src="feedwise-logo.png" alt="FeedWise Logo" class="brand-logo" />
-
+        <img src="{{ url_for('static', filename='feedwise-logo.png') }}" class="brand-logo">
         <div class="brand-text">
           <h2>Feed<span>Wise</span></h2>
           <p>Smart Feedback Analysis</p>
@@ -26,8 +24,8 @@
       </div>
 
       <div class="nav-buttons">
-        <a href="login.html" class="nav-link">Sign In</a>
-        <a href="register.html" class="nav-btn">Register</a>
+        <a href="{{ url_for('login') }}" class="nav-link">Sign In</a>
+        <a href="{{ url_for('register') }}" class="nav-btn">Register</a>
       </div>
     </header>
 
@@ -35,17 +33,17 @@
       <div class="hero-left">
         <p class="hero-badge">AI-Powered Academic Platform</p>
 
-        <h1>Transform Student Feedback into Meaningful Insights</h1>
-
+        <h1>Welcome to Feedwise</h1>
+        <h2>Transform Student Feedback into Meaningful Insights</h2>
         <p class="hero-description">
-          FeedWise helps universities analyze, summarize, and compare student
-          feedback through one smart platform, making course evaluation faster,
-          clearer, and more effective.
+        FeedWise enables course evaluation faster, clearer, and more efficiently
+        by assisting universities in analyzing, summarizing, and comparing student 
+        comments on one intelligent platform.
         </p>
 
         <div class="hero-buttons">
-          <a href="login.html" class="primary-btn">Sign In</a>
-          <a href="register.html" class="secondary-btn">Create Account</a>
+          <a href="{{ url_for('login') }}" class="primary-btn">Sign In</a>
+          <a href="{{ url_for('register') }}" class="secondary-btn">Create Account</a>
         </div>
 
         <div class="hero-stats">
@@ -75,7 +73,7 @@
           </div>
 
           <div class="logo-showcase">
-            <img src="feedwise-logo.png" alt="FeedWise Logo" class="showcase-logo" />
+            <img src="{{ url_for('static', filename='feedwise-logo.png') }}" class="showcase-logo" />
           </div>
 
           <div class="visual-grid">
@@ -104,6 +102,11 @@
     </main>
 
   </div>
-
+<footer class="welcome-footer">
+    <div class="footer-content">
+        <p>&copy; 2026 FeedWise. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

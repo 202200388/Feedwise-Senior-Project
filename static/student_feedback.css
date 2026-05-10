@@ -1,0 +1,114 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+}
+
+
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+
+.feedback-container {
+    background: #fff;
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+}
+
+
+.form-section {
+    flex: 1;
+    padding: 60px;
+}
+
+.form-section h1 {
+    font-size: 32px;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.form-section p.subtitle {
+    color: #64748b;
+    margin-bottom: 32px;
+    font-size: 15px;
+}
+
+
+.brand-section {
+    flex: 0.8;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 1px solid #f1f5f9;
+}
+
+.brand-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.brand-card img {
+    width: 60px;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    margin-bottom: 24px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+
+.btn-submit {
+    width: 100%;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-submit:hover {
+    background: #2563eb;
+}

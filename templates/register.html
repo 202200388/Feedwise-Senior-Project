@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FeedWise | Register</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+</head>
+<body>
+
+    <div class="register-page">
+
+        <header class="navbar">
+            <div class="brand">
+                <img src="{{ url_for('static', filename='feedwise-logo.png') }}" alt="FeedWise Logo" class="brand-logo" />
+                <div class="brand-text">
+                    <h2>Feed<span>Wise</span></h2>
+                    <p>Smart Feedback Analysis</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="{{ url_for('login') }}" class="nav-link">Sign In</a>
+                <a href="{{ url_for('register') }}" class="nav-btn active-btn">Register</a>
+            </div>
+        </header>
+
+        <main class="register-container">
+            <div class="register-card">
+
+                <section class="register-left">
+                    <div class="form-header">
+                        <p class="badge">Create Your Account</p>
+                        <h1>And Join FeedWise</h1>
+                        <p class="subtitle">
+                            Create your account to access smart academic feedback analysis, 
+                            summaries, and comparison tools.
+                        </p>
+                    </div>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div style="padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 8px; 
+                                      font-size: 14px; font-weight: 500;
+                                      color: {{ '#721c24' if category == 'danger' else '#155724' }}; 
+                                      background-color: {{ '#f8d7da' if category == 'danger' else '#d4edda' }}; 
+                                      border-color: {{ '#f5c6cb' if category == 'danger' else '#c3e6cb' }};">
+                            {{ message }}
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+
+                    <form class="register-form" action="{{ url_for('register') }}" method="POST">
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label>First Name</label>
+                                <input name="first_name" type="text" placeholder="First Name" value="{{ first_name or '' }}" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label>Last Name</label>
+                                <input name="last_name" type="text" placeholder="Last Name" value="{{ last_name or '' }}" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>University Email</label>
+                            <input name="email" type="email" placeholder="Enter your university email" value="{{ email or '' }}" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Role</label>
+                            <select name="role" id="role" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; background-color: #f9f9f9; cursor: pointer;">
+                                <option value="" disabled {{ 'selected' if not role }}>Select your role</option>
+                                <option value="Student" {{ 'selected' if role == 'Student' }}>Student</option>
+                                <option value="Instructor" {{ 'selected' if role == 'Instructor' }}>Instructor</option>
+                                <option value="Admin" {{ 'selected' if role == 'Admin' }}>Admin</option>
+                            </select>
+                        </div>
+
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label>Password</label>
+                                <input name="password" type="password" placeholder="Create a password" required>
+                            </div>
+
+                            <div class="input-group">
+                                <label>Confirm Password</label>
+                                <input name="confirm_password" type="password" placeholder="Confirm password" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="primary-btn">Create Account</button>
+                    </form>
+
+                    <p class="bottom-text">
+                        Already have an account?
+                        <a href="{{ url_for('login') }}">Sign In</a>
+                    </p>
+                </section>
+
+                <section class="register-right">
+                    <div class="visual-panel">
+                        <div class="panel-top">
+                            <span></span><span></span><span></span>
+                        </div>
+
+                        <div class="panel-logo-box">
+                            <img src="{{ url_for('static', filename='feedwise-logo.png') }}" alt="FeedWise Logo" class="panel-logo" />
+                        </div>
+
+                        <div class="panel-content">
+                            <div class="feature-card">
+                                <h3>AI Summaries</h3>
+                                <p>Convert long student feedback into clear, concise summaries.</p>
+                            </div>
+
+                            <div class="feature-card">
+                                <h3>Smart Analysis</h3>
+                                <p>Identify trends, strengths, and weaknesses automatically.</p>
+                            </div>
+
+                            <div class="stats-row">
+                                <div class="stat-box">
+                                    <h4>1200+</h4>
+                                    <p>Feedback Entries</p>
+                                </div>
+                                <div class="stat-box accent-stat">
+                                    <h4>35</h4>
+                                    <p>Courses Analyzed</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

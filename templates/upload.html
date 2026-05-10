@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FeedWise | Upload Feedback</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='upload.css') }}">
+</head>
+
+<body>
+
+  <div class="upload-page">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="{{ url_for('static', filename='feedwise-logo.png') }}" alt="FeedWise Logo" class="sidebar-logo" />
+        <div class="sidebar-brand-text">
+          <h2>Feed<span>Wise</span></h2>
+          <p>Smart Feedback Analysis</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        {% if session['user_role']|lower == 'instructor' or session['user_role']|lower == 'admin' %}
+        <a class="nav-item home-active">Home</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('dashboard') }}" >Dashboard</a>
+        <a href="{{ url_for('instructor_download') }}" >Download Feedbacks</a>
+        <a href="{{ url_for('upload') }}" class="active">Upload Feedback</a>
+        <a href="{{ url_for('summary') }}">Summary</a>
+        <a href="{{ url_for('compare') }}">Compare</a>
+        <a href="{{ url_for('settings') }}">Settings</a>
+        <a href="{{ url_for('logout') }}" style="color: #d93025;">Logout</a>
+        {% endif %}
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar">
+            {{ session['user_name'][0]|upper if session['user_name'] else 'U' }}
+        </div>
+        <div>
+            <h4>{{ session['user_name'] }}</h4>
+            <p>{{ session['user_role'] }}</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="breadcrumb">Home / Upload Feedback</p>
+          <h1>Upload Feedback</h1>
+          <p class="topbar-subtitle">
+            Upload a file or enter feedback text to analyze and summarize it.
+          </p>
+        </div>
+      </header>
+
+      <section class="upload-card">
+        <div class="input-group" style="margin-bottom: 20px; padding: 0 20px;">
+            <label for="courseSelect" style="display: block; margin-bottom: 8px; font-weight: bold;">Select Course</label>
+            <select id="courseSelect" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd;">
+                <option value="">-- Choose a Course --</option>
+                {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.code }} - {{ course.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="file-tab">Upload File</button>
+          <button class="tab-btn" data-tab="text-tab">Input Text</button>
+        </div>
+
+        <div id="file-tab" class="tab-content active">
+          <div class="drop-zone" id="dropZone">
+            <input type="file" id="fileInput" hidden accept=".pdf,.docx,.txt,.csv" />
+            <div class="drop-zone-content">
+              <div class="upload-icon">📁</div>
+              <h3>Drag & Drop your file here</h3>
+              <p>or click to browse from your device</p>
+              <button type="button" class="browse-btn" id="browseBtn">Browse File</button>
+              <span class="file-types">Supported: PDF, CSV, TXT</span>
+              <p class="file-name" id="fileName">No file selected</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="text-tab" class="tab-content">
+          <label for="feedbackText">Enter Feedback Text</label>
+          <textarea id="feedbackText" placeholder="Paste student feedback here..."></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="submit-btn" id="submitBtn">Submit & Analyze</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    //tabs
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.tab).classList.add('active');
+        });
+    });
+
+    //file Upload
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const browseBtn = document.getElementById('browseBtn');
+    const fileNameDisplay = document.getElementById('fileName');
+
+    browseBtn.addEventListener('click', () => fileInput.click());
+    
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = fileInput.files[0].name;
+            fileNameDisplay.style.color = "#4a90e2";
+        }
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    ['dragleave', 'drop'].forEach(event => {
+        dropZone.addEventListener(event, () => dropZone.classList.remove('dragover'));
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            fileNameDisplay.textContent = e.dataTransfer.files[0].name;
+        }
+    });
+
+    //submit data
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+        const courseId = document.getElementById('courseSelect').value;
+        const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
+        const formData = new FormData();
+
+    //ensure the course is selected
+        if (!courseId) {
+            alert('Please select a course first!');
+            return;
+        }
+        formData.append('course_id', courseId);
+
+        if (activeTab === 'file-tab') {
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first!');
+                return;
+            }
+            formData.append('file', fileInput.files[0]);
+        } else {
+            const text = document.getElementById('feedbackText').value;
+            if (!text.trim()) {
+                alert('Please enter some feedback text!');
+                return;
+            }
+            formData.append('text', text);
+        }
+
+    //show analyzing status
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.innerText;
+        submitBtn.innerText = "Analyzing with AI...";
+        submitBtn.disabled = true;
+
+        try {
+            const response = await fetch('/upload', { 
+                method: 'POST', 
+                body: formData 
+            });
+
+            if (response.ok) {
+                window.location.href = '/dashboard';
+            } else {
+                const errorData = await response.text();
+                alert('Analysis failed. Make sure the file is a valid PDF and try again.');
+                console.error('Server Error:', errorData);
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while connecting to the server.');
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+  </script>
+</body>
+</html>
