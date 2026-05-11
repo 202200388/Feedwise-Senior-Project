@@ -310,32 +310,29 @@ body {
 }
 
 /* Actions */
-/* حاوية العنوان والرابط لمحاذاتهما بجانب بعض */
-/* تنظيم الصف العلوي فوق المربع */
+
 .label-wrapper {
     display: flex;
-    justify-content: space-between; /* دفع التسمية لليسار والرابط لأقصى اليمين */
-    align-items: flex-end; /* محاذاة العناصر مع خط القاعدة */
-    margin-bottom: 8px; /* مسافة بسيطة فوق المربع */
+    justify-content: space-between; 
+    align-items: flex-end;
+    margin-bottom: 8px; 
     width: 100%;
 }
 
-/* تنسيق كلمة التعديل (الرابط الأزرق) */
+
 .edit-password-link {
-    color: #2d6cdf; /* اللون الأزرق الأساسي */
+    color: #2d6cdf; 
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
-    transition: all 0.3s ease; /* سلاسة في تغيير اللون */
+    transition: all 0.3s ease; 
 }
 
-/* عند ملامسة الماوس (يتحول للبرتقالي) */
 .edit-password-link:hover {
-    color: #f59e0b; /* لون برتقالي/أصفر */
-    text-decoration: underline; /* إضافة خط تحت الكلمة لزيادة وضوح التفاعل */
+    color: #f59e0b;
+    text-decoration: underline;
 }
 
-/* تنسيق إضافي لضمان ثبات المربع */
 .readonly-password {
     width: 100%;
     padding: 12px;
