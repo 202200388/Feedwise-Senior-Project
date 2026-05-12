@@ -7,7 +7,11 @@ from excel_reader import load_feedback_from_excel
 from pdf_reader import extract_text_from_pdf
 import csv
 import datetime
+from flask import Flask
 
+app = Flask(__name__)
+if __name__ == "_main_":
+    app.run(host="0.0.0.0", port=8080)
 # ---------------------------
 # CSV Saving Function
 # ---------------------------
