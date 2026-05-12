@@ -198,8 +198,27 @@ def login():
         
     return render_template('login.html')
 
-@app.route('/forgot_password')
+@app.route('/forgot_pass', methods=['GET', 'POST'])
 def forgot_pass():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        if new_password != confirm_password:
+            flash("Passwords do not match!", "danger")
+            return redirect(url_for('forgot_pass'))
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            from werkzeug.security import generate_password_hash
+            user.password = generate_password_hash(new_password) 
+            db.session.commit() 
+            flash("Password updated successfully! Please login.", "success")
+            return redirect(url_for('login'))
+        else:
+            flash("Email not found!", "danger")
+            
     return render_template('forgot_pass.html')
 
 @app.route('/dashboard')
@@ -634,11 +653,18 @@ def upload():
                 analysis.negative_points = neg_pts if neg_pts else "General improvements"
                 
                 #analyze emotions and accurately retain the percentage
-                analysis.pos_score = analyze_sentiment(clean_content)
+                res = analyze_sentiment(clean_content)
+                if isinstance(res, dict):
+                    if res['label'] == 'POSITIVE':
+                        analysis.pos_score = int(res['score'] * 100)
+                    else:
+                        analysis.pos_score = int(100 - (res['score'] * 100))
+                else:
+                    analysis.pos_score = res
                 
                 db.session.commit()
-                flash(f"Analysis for {Course.query.get(course_id).course_code} updated successfully!", "success")
-
+                flash(f"Analysis for {Course.query.get(course_id).code} updated successfully!", "success")
+                
             if os.path.exists(filepath): os.remove(filepath)
             return redirect(url_for('dashboard'))
 

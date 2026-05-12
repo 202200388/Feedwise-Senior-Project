@@ -15,9 +15,11 @@ def analyze_sentiment(text):
     Returns a dict with 'label' (POSITIVE/NEGATIVE) and 'score' (confidence 0-1).
     """
     if not text or not text.strip():
-        return 0
+        return {'label': 'NEUTRAL', 'score': 0.0}
+    
     result = sentiment_pipeline(text[:512])[0]
-    score = result['score'] * 100
-    if result['label'] == 'NEGATIVE':
-        return int(100 - score)
-    return int(score)
+    
+    return {
+        'label': result['label'],
+        'score': result['score']
+    }
