@@ -1,4 +1,5 @@
 flask
+gunicorn
 scikit-learn
 transformers
 torch
@@ -6,4 +7,7 @@ openpyxl
 pandas
 numpy
 nltk
-gunicorn
+PyPDF2
+sentencepiece
+accelerate
+safetensors
