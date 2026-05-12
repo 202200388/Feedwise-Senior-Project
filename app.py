@@ -126,8 +126,8 @@ class Analysis(db.Model):
 #Routes:
 
 @app.route('/')
-def welcome():
-    return render_template('welcome.html')
+def index():
+    return render_template('index.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -814,7 +814,7 @@ def settings():
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('welcome'))
+    return redirect(url_for('index'))
 
 
 #data preparation:
