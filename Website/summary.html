@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FeedWise | AI Summary</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='summary.css') }}"/>
+</head>
+
+<body class="{{ 'dark-mode' if saved_theme == 'dark' else '' }}">
+    
+<div class="summary-page">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="{{ url_for('static', filename='feedwise-logo.png') }}" alt="FeedWise Logo" class="sidebar-logo" />
+        <div class="sidebar-brand-text">
+          <h2>Feed<span>Wise</span></h2>
+          <p>Smart Feedback Analysis</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        {% if session['user_role']|lower == 'instructor' or session['user_role']|lower == 'admin' %}
+        <a class="nav-item home-active">Home</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('dashboard') }}" >Dashboard</a>
+        <a href="{{ url_for('instructor_download') }}" >Download Feedbacks</a>
+        <a href="{{ url_for('upload') }}" >Upload Feedback</a>
+        <a href="{{ url_for('summary') }}" class="active">Summary</a>
+        <a href="{{ url_for('compare') }}">Compare</a>
+        <a href="{{ url_for('settings') }}">Settings</a>
+        <a href="{{ url_for('logout') }}" style="color: #d93025;">Logout</a>
+        {% endif %}
+      </nav>
+      <div class="sidebar-user">
+        <div class="user-avatar">
+            {{ session['user_name'][0]|upper if session['user_name'] else 'U' }}
+        </div>
+        <div>
+            <h4>{{ session['user_name'] }}</h4>
+            <p>{{ session['user_role'] }}</p>
+        </div>
+      </div>
+    </aside>
+
+<main class="main-content">
+    <header class="topbar">
+      <div>
+        <p class="breadcrumb">Home / Summary</p>
+        <h1>{{ course.code if course else 'General' }} Insight Summary</h1>
+      </div>
+    </header>
+
+    {% if course %}
+    <section class="ai-box card" style="padding: 30px; border-radius: 15px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+        <div>
+          <h2 style="color: #2c3e50; margin-bottom: 5px;">{{ course.name }}</h2>
+          <span style="color: #7f8c8d;">Analysis Date: {{ analysis.analysis_date.strftime('%Y-%m-%d') if analysis and analysis.analysis_date else 'New Analysis' }}</span>
+        </div>
+        
+        <div style="text-align: right;">
+          {# AI Sentiment Score Calculation from the Analysis table #}
+          {% set current_score = analysis.pos_score|round|int if (analysis and analysis.pos_score is defined) else 0 %}
+          
+          <div style="font-size: 1.5em; font-weight: bold; color: #2c3e50;">{{ current_score }}%</div>
+          <div style="font-size: 0.8em; color: #95a5a6; text-transform: uppercase;">Sentiment Score</div>
+          <div class="sentiment-meter" style="width: 100px; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; margin-top: 5px;">
+            <div class="sentiment-fill" style="width: {{ current_score }}%; height: 100%; transition: width 1s; background: {% if current_score >= 60 %}#4caf50{% elif current_score >= 40 %}#f39c12{% else %}#e74c3c{% endif %};"></div>
+          </div>
+        </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+      <h3 style="color: #3498db; font-size: 1em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">
+          <i class="fas fa-robot"></i> AI Executive Summary
+      </h3>
+        
+      <p style="font-size: 1.1em; line-height: 1.8; color: #34495e; background: #fdfdfd; padding: 20px; border-radius: 10px; border-left: 4px solid #3498db; box-shadow: inset 0 0 5px rgba(0,0,0,0.02);">
+          {# Displaying the AI generated summary text from the database #}
+          {% if analysis and analysis.summary_text %}
+              {{ analysis.summary_text }}
+          {% else %}
+              The AI is currently analyzing the feedback for this course. Please upload a feedback file to generate professional insights.
+          {% endif %}
+      </p>
+
+      <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+              <h4 style="color: #2e7d32; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase;">Strengths</h4>
+              <div id="positive-tags">
+                  {% if analysis and analysis.positive_points %}
+                      {% for point in analysis.positive_points.split(',') %}
+                          {% if point.strip() %}
+                              <span class="point-tag positive-point" style="display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 6px 14px; border-radius: 20px; margin: 4px; font-size: 0.85em; border: 1px solid #c8e6c9; font-weight: 500;">
+                                  {{ point.strip() }}
+                              </span>
+                          {% endif %}
+                      {% endfor %}
+                  {% else %}
+                      <span style="color: #999; font-style: italic;">No specific strengths found.</span>
+                  {% endif %}
+              </div>
+          </div>
+
+          <div>
+              <h4 style="color: #c62828; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase;">Improvements</h4>
+              <div id="negative-tags">
+                  {% if analysis and analysis.negative_points %}
+                      {% for point in analysis.negative_points.split(',') %}
+                          {% if point.strip() %}
+                              <span class="point-tag negative-point" style="display: inline-block; background: #fff3e0; color: #e65100; padding: 6px 14px; border-radius: 20px; margin: 4px; font-size: 0.85em; border: 1px solid #ffe0b2; font-weight: 500;">
+                                  {{ point.strip() }}
+                              </span>
+                          {% endif %}
+                      {% endfor %}
+                  {% else %}
+                      <span style="color: #999; font-style: italic;">No major issues identified.</span>
+                  {% endif %}
+              </div>
+          </div>
+      </div>
+    </section>
+
+    {% else %}
+    <section class="card" style="text-align: center; padding: 80px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div style="font-size: 4em; color: #ecf0f1; margin-bottom: 20px;"><i class="fas fa-folder-open"></i></div>
+        <h2 style="color: #bdc3c7; margin-bottom: 10px;">No Course Selected</h2>
+        <p style="color: #7f8c8d; max-width: 400px; margin-bottom: 30px;">Please select a course from your dashboard to view its dedicated AI insights and feedback trends.</p>
+        <a href="{{ url_for('dashboard') }}" class="btn" style="padding: 12px 25px; background: #3498db; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);">Return to Dashboard</a>
+    </section>
+    {% endif %}
+</main>
+</div>
+</body>
+</html>

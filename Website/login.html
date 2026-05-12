@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FeedWise | Sign In</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="brand" onclick="window.location.href='/'" style="cursor: pointer;">
+            <img src="{{ url_for('static', filename='feedwise-logo.png') }}" alt="FeedWise Logo" class="brand-logo" />
+            <div class="brand-text">
+                <h2>Feed<span>Wise</span></h2>
+                <p>Smart Feedback Analysis</p>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="{{ url_for('login') }}" class="nav-link active">Sign In</a>
+            <a href="{{ url_for('register') }}" class="nav-btn">Register</a>
+        </div>
+    </header>
+
+    <main class="login-container">
+        <div class="login-card">
+            <div class="login-left">
+                <h1>Welcome Back</h1>
+                <p class="subtitle">Sign in to your FeedWise account</p>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div style="padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; 
+                  color: {{ '#721c24' if category == 'danger' else '#155724' }}; 
+                  background-color: {{ '#f8d7da' if category == 'danger' else '#d4edda' }}; 
+                  border-color: {{ '#f5c6cb' if category == 'danger' else '#c3e6cb' }};">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+                <form action="{{ url_for('login') }}" method="POST">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" placeholder="Enter your email" required />
+
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" placeholder="Enter your password" required />
+
+                    <div class="options">
+                        <label class="remember-me">
+                            <input type="checkbox" name="remember" />
+                            <span>Remember me</span>
+                        </label>
+                        <a href="{{ url_for('forgot_pass') }}" class="forgot-link">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="primary-btn">Sign In</button>
+                </form>
+
+                <p class="bottom-text">
+                    Don’t have an account?
+                    <a href="{{ url_for('register') }}">Register</a>
+                </p>
+            </div>
+
+            <div class="login-right">
+                <div class="visual-box">
+                    <img src="{{ url_for('static', filename='feedwise-logo.png') }}" alt="FeedWise Logo" class="login-logo" />
+                    <p>Smart AI-powered feedback analysis</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>
