@@ -1,7 +1,9 @@
 flask
 scikit-learn
-numpy
-pandas
-nltk
 transformers
 torch
+openpyxl
+pandas
+numpy
+nltk
+gunicorn
