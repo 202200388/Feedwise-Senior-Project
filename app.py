@@ -129,6 +129,50 @@ class Analysis(db.Model):
 def index():
     return render_template('index.html')
 
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+@app.route("/register")
+def register():
+    return render_template("register.html")
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
+
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
+
+@app.route("/settings")
+def settings():
+    return render_template("settings.html")
+
+@app.route("/upload")
+def upload():
+    return render_template("upload.html")
+
+@app.route("/summary")
+def summary():
+    return render_template("summary.html")
+
+@app.route("/compare")
+def compare():
+    return render_template("compare.html")
+
+@app.route("/download")
+def download():
+    return render_template("download.html")
+
+@app.route("/forgot_pass")
+def forgot_pass():
+    return render_template("forgot_pass.html")
+
+@app.route("/student_feedback")
+def student_feedback():
+    return render_template("student_feedback.html")
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
